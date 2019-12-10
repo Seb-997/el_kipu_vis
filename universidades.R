@@ -9,6 +9,8 @@ carnets <- read.csv(".//data//Carnes_Universitarios.csv",stringsAsFactors = F, e
 
 universidades <- read.csv(".//data//Universidades.csv",stringsAsFactors = F, encoding = "UTF-8")
 
+numero_estudiantes <- read.csv(".//data//estudiantes_universidad.csv",stringsAsFactors = F, encoding = "UTF-8")
+
 DENEGADAS <- c("UNIVERSIDAD PERUANA SANTO TOMAS DE AQUINO DE CIENCIA E INTEGRACION","UNIVERSIDAD SAN PEDRO","UNIVERSIDAD SEMINARIO BIBLICO ANDINO",
                "UNIVERSIDAD PRIVADA JUAN MEJIA BACA SOCIEDAD ANONIMA CERRADA","UNIVERSIDAD PRIVADA AUTONOMA DEL SUR","UNIVERSIDAD PERUANA AUSTRAL DEL CUSCO",
                "UNIVERSIDAD NACIONAL SAN LUIS GONZAGA DE ICA","UNIVERSIDAD CIENCIAS DE LA SALUD","UNIVERSIDAD PRIVADA SISE","UNIVERSIDAD INCA GARCILASO DE LA VEGA ASOCIACION CIVIL",
@@ -16,7 +18,9 @@ DENEGADAS <- c("UNIVERSIDAD PERUANA SANTO TOMAS DE AQUINO DE CIENCIA E INTEGRACI
                "UNIVERSIDAD DE AYACUCHO FEDERICO FROEBEL","GRUPO EDUCATIVO UNIVERSIDAD PRIVADA DE ICA","UNIVERSIDAD PRIVADA DE PUCALLPA","UNIVERSIDAD PARTICULAR DE CHICLAYO")
 
 
-
+numero_estudiantes <- numero_estudiantes %>%
+                          mutate(nombre = toupper(X.U.FEFF.nombre))%>%
+                          select(nombre,estudiantes)
 
 
 universidades<- universidades %>%
@@ -49,21 +53,14 @@ carnets_solo_universidades <- carnets %>%
                                   filter(NOMBRE_UNIVERSIDAD %in% nombres_universidades)
 
 
-carnets_solo_universidades <- carnets_solo_universidades %>%
-                              left_join(universidades[,2:6], by=c("NOMBRE_UNIVERSIDAD" = "NOMBRE"))
+universidades_con_estudiantes <- numero_estudiantes %>%
+                              left_join(universidades[,2:6], by=c("nombre" = "NOMBRE"))
 
-universidades%>%
-  filter(ESTADO.LICENCIAMIENTO == "DENEGADA")%>%
-  select(NOMBRE)%>%
-  unique()
 
-carnets_solo_universidades %>%
-  filter(ESTADO.LICENCIAMIENTO == "DENEGADA")%>%
-  select(NOMBRE_UNIVERSIDAD)%>%
-  unique()
+estudiantes_por_estatus <- universidades_con_estudiantes%>%
+  group_by(ESTADO.LICENCIAMIENTO)%>%
+  summarise(n=sum(estudiantes))
 
-carnets_solo_universidades%>%
-  group_by(NOMBRE_UNIVERSIDAD)%>%
-  summarise(n = sum(CANTIDAD_CARNES))%>%
-  arrange(-n)
+ggplot()+
+  geom_bar(data=estudiantes_por_estatus,aes(ESTADO.LICENCIAMIENTO,n,fill=ESTADO.LICENCIAMIENTO),stat="identity")
 
