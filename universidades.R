@@ -24,11 +24,11 @@ numero_estudiantes <- numero_estudiantes %>%
 
 
 universidades<- universidades %>%
-                    mutate(NOMBRE = gsub("√ì","O",NOMBRE),
-                           NOMBRE = gsub("√Å","A",NOMBRE),
-                           NOMBRE = gsub("√â","E",NOMBRE),
-                           NOMBRE = gsub("√ö","U",NOMBRE),
-                           NOMBRE = gsub("√ç","I",NOMBRE),
+                    mutate(NOMBRE = gsub("”","O",NOMBRE),
+                           NOMBRE = gsub("¡","A",NOMBRE),
+                           NOMBRE = gsub("…","E",NOMBRE),
+                           NOMBRE = gsub("⁄","U",NOMBRE),
+                           NOMBRE = gsub("Õ","I",NOMBRE),
                            NOMBRE = gsub(" S.A.C.","",NOMBRE),
                            NOMBRE = gsub(" S.A.C","",NOMBRE),
                            NOMBRE = gsub(" SAC","",NOMBRE),
