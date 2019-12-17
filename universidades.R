@@ -15,7 +15,8 @@ DENEGADAS <- c("UNIVERSIDAD PERUANA SANTO TOMAS DE AQUINO DE CIENCIA E INTEGRACI
                "UNIVERSIDAD PRIVADA JUAN MEJIA BACA SOCIEDAD ANONIMA CERRADA","UNIVERSIDAD PRIVADA AUTONOMA DEL SUR","UNIVERSIDAD PERUANA AUSTRAL DEL CUSCO",
                "UNIVERSIDAD NACIONAL SAN LUIS GONZAGA DE ICA","UNIVERSIDAD CIENCIAS DE LA SALUD","UNIVERSIDAD PRIVADA SISE","UNIVERSIDAD INCA GARCILASO DE LA VEGA ASOCIACION CIVIL",
                "UNIVERSIDAD PERUANA DEL ORIENTE","UNIVERSIDAD GLOBAL DEL CUSCO SOCIEDAD ANONIMA CERRADA","UNIVERSIDAD PRIVADA JUAN PABLO II","UNIVERSIDAD PRIVADA DE LA SELVA PERUANA",
-               "UNIVERSIDAD DE AYACUCHO FEDERICO FROEBEL","GRUPO EDUCATIVO UNIVERSIDAD PRIVADA DE ICA","UNIVERSIDAD PRIVADA DE PUCALLPA","UNIVERSIDAD PARTICULAR DE CHICLAYO")
+               "UNIVERSIDAD DE AYACUCHO FEDERICO FROEBEL","GRUPO EDUCATIVO UNIVERSIDAD PRIVADA DE ICA","UNIVERSIDAD PRIVADA DE PUCALLPA","UNIVERSIDAD PARTICULAR DE CHICLAYO",
+               "UNIVERSIDAD INTERAMERICANA PARA EL DESARROLLO","UNIVERSIDAD PERUANA DE CIENCIAS E INFORMATICA")
 
 
 numero_estudiantes <- numero_estudiantes %>%
@@ -24,11 +25,11 @@ numero_estudiantes <- numero_estudiantes %>%
 
 
 universidades<- universidades %>%
-                    mutate(NOMBRE = gsub("”","O",NOMBRE),
-                           NOMBRE = gsub("¡","A",NOMBRE),
-                           NOMBRE = gsub("…","E",NOMBRE),
-                           NOMBRE = gsub("⁄","U",NOMBRE),
-                           NOMBRE = gsub("Õ","I",NOMBRE),
+                    mutate(NOMBRE = gsub("O","O",NOMBRE),
+                           NOMBRE = gsub("√Å","A",NOMBRE),
+                           NOMBRE = gsub("√â","E",NOMBRE),
+                           NOMBRE = gsub("√ö","U",NOMBRE),
+                           NOMBRE = gsub("√ç","I",NOMBRE),
                            NOMBRE = gsub(" S.A.C.","",NOMBRE),
                            NOMBRE = gsub(" S.A.C","",NOMBRE),
                            NOMBRE = gsub(" SAC","",NOMBRE),

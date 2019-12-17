@@ -30,13 +30,12 @@ ggplot() +
   scale_y_continuous(labels = paste0(seq(0,60,10),rep("B",7)),breaks = seq(0,60,10))+
   scale_x_continuous(breaks = seq(1994,2018,4 ))+
   annotate(geom="text",x=2006,y=40,label="Aumentó 687%",family = "Roboto Thin", colour="#3a3535",size=10)+
-  annotate(geom="text",x=2018,y=30,label="bold('Privado: 29.2B')",family = "Roboto Thin",size=18,colour ="#ffffff",parse=T,angle=90)+
-  annotate(geom="text",x=2018,y=10,label="bold('Publico: 19.7B')",family = "Roboto Thin",size=18,colour ="#ffffff",parse=T,angle=90)+
-  annotation_custom(img,x=2010,y=40)+
+  annotate(geom="text",x=2017.4,y=32,label="bold('Privado: 29.2B')",family = "Roboto Thin",size=10,colour ="#ffffff",parse=T,angle=90)+
+  annotate(geom="text",x=2017.4,y=10,label="bold('Publico: 19.7B')",family = "Roboto Thin",size=10,colour ="#ffffff",parse=T,angle=90)+
   ylab("Gasto S/.")+
   xlab("Año")+
-  labs(title="Gasto en educacion", subtitle = "Publico vs Privado 1994-2018", 
-  caption= "Gasto en la educacion peruana por sector. El gasto en el sector privado esta definido como el Valor Bruto de la Producción de la actividad de Educación Privada.")+
+  labs(title="Gasto en educacion - Perú", subtitle = "Publico vs Privado 1994-2018", 
+  caption= "Gasto en la educacion peruana por sector. El gasto en el sector /n privado esta definido como el Valor Bruto de la Producción de la actividad de Educación Privada.")+
   scale_fill_manual(values = c("#0A2342","#cc1010"))+
   scale_colour_manual(values = c("#0A2342","#cc1010"))+
 theme(
