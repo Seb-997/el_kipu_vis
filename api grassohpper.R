@@ -24,7 +24,7 @@ raw_data <- list()
 
 for(i in 2:nrow(cities)){
   print(cities[i,1])
-  route <- GET(paste0("https://graphhopper.com/api/1/route?point=",cities[1,2],',',cities[1,3],"&point=",cities[i,2],',',cities[i,3],"&points_encoded=false&detail=street_name&vehicle=car&locale=en&calc_points=true&key=15a22858-a85c-4016-821a-8405903c8a13"), 
+  route <- GET(paste0("https://graphhopper.com/api/1/route?point=",cities[1,2],',',cities[1,3],"&point=",cities[i,2],',',cities[i,3],"&points_encoded=false&detail=street_name&vehicle=car&locale=en&calc_points=true&key=API_KEY"), 
                      accept_json())%>%
     content("parsed")
   
@@ -82,35 +82,43 @@ final_df <- final_df %>%
   group_by(destination)%>%
   mutate(
          cumsum_duration_raw_hours = cumsum(duration)/3600000,
-         cumsum_duration_hours = round(cumsum_duration_raw_hours,0),
-         cumsum_duration_2_hour_int = (round(cumsum_duration_raw_hours/2,0))*2
+         cumsum_duration_hours = as.integer(cumsum_duration_raw_hours),
+         cumsum_duration_2_hour_int = (as.integer(cumsum_duration_raw_hours/2))*2
   )
+
 
 
 ggplot()+
   geom_polygon(data =  dep_ggplot,aes(x=long, y = lat, group = group),color="white",fill=NA)+
   geom_path(data = final_df, aes(x=lon,y=lat,group=destination,colour=as.factor(cumsum_duration_2_hour_int)),lineend="round",linejoin="round",size=2)+
-  geom_text(data=cities[-c(cities_to_the_left,cities_to_the_right,cities_left_and_down),],aes(x=lon,y=lat+0.35, label = cities),colour="white",face="bold")+
-  geom_text(data=cities[cities_to_the_left,],aes(x=lon-.7,y=lat, label = cities),colour="white",face="bold")+
-  geom_text(data=cities[cities_to_the_right,],aes(x=lon+.7,y=lat, label = cities),colour="white",face="bold")+
-  geom_text(data=cities[cities_left_and_down,],aes(x=lon-.7,y=lat-.2, label = cities),colour="white",face="bold")+
+  geom_text(data=cities[-c(cities_to_the_left,cities_to_the_right,cities_left_and_down),],aes(x=lon,y=lat+0.35, label = cities),colour="white",family="Roboto",size=4.5)+
+  geom_text(data=cities[cities_to_the_left,],aes(x=lon-.7,y=lat, label = cities),colour="white",family="Roboto",size=4.5)+
+  geom_text(data=cities[cities_to_the_right,],aes(x=lon+.8,y=lat, label = cities),colour="white",family="Roboto",size=4.5)+
+  geom_text(data=cities[cities_left_and_down,],aes(x=lon-.7,y=lat-.2, label = cities),colour="white",family="Roboto",size=4.5)+
   geom_point(data=cities,aes(x=lon,y=lat),colour="white",size=2)+
-  annotate("text",x=-73.8,y=-4,label="No road connection",colour="white")+
+  annotate("text",x=-73.4,y=-4,label="No road connection",colour="white",family="Roboto")+
   scale_color_manual(labels = c(paste0(seq(0,16,2),'-',seq(2,18,2),"hours")),
-                     values = c('green4','green3','green2','green1','greenyellow','yellow1','yellow2','yellow3','tomato'))+
-  labs(colour = "Car trip duration", title = "Travel time to major cities in Peru from Lima",
-       subtitle = "Using Grasshopper Routing Service")+
+                     values = c('green4','green2','green1','greenyellow','yellow','yellow3','orange','tomato','firebrick'))+
+  labs(colour = "Car trip duration", title = "Driving travel time to major cities in Peru from Lima",
+       subtitle = "Using Grasshopper Routing Service",caption = "@elqipu        www.elqipu.pe")+
   coord_fixed()+
   theme(
-    text = element_text(colour="white", face="bold"),
+    text = element_text(colour="white", family = "Roboto Thin", face ="bold"),
     plot.background =element_rect(fill = "black"),
-    panel.backgroun = element_rect(fill = "black"),
+    panel.background = element_rect(fill = "black"),
     panel.grid = element_blank(),
     axis.text = element_blank(),
     axis.ticks = element_blank(),
     legend.background = element_rect(fill="black"),
     legend.box.background = element_rect(fill="black"),
     axis.title = element_blank(),
-    legend.key = element_rect(fill="black",colour="black")
+    legend.key = element_rect(fill="black",colour="black"),
+    plot.title = element_text(size = 20),
+    plot.subtitle = element_text(size=18),
+    plot.caption = element_text(size=16),
+    legend.text = element_text(size=13),
+    legend.title = element_text(size=13)
     
   )
+
+ggsave("rutas_peru.png",plot = last_plot(), height=10,width=10, dpi = 320,unit="in")
